@@ -2,25 +2,23 @@
 using DotNetCoreSqlDb.Data;
 var builder = WebApplication.CreateBuilder(args);
 
-// Add database context and cache
 builder.Services.AddDbContext<MyDatabaseContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")));
-
-builder.Services.AddStackExchangeRedisCache(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")));
+builder.Services.AddStackExchangeRedisCache(options => 
 {
     options.Configuration = builder.Configuration["AZURE_REDIS_CONNECTIONSTRING"];
     options.InstanceName = "SampleInstance";
 });
 
-// Add services to the container.
+// Додавання сервісів у контейнер.
 builder.Services.AddControllersWithViews();
 
-// Add App Service logging
+// Додавання логування App Service
 builder.Logging.AddAzureWebAppDiagnostics();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// Налаштування HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Home/Error");
